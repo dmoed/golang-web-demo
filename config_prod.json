@@ -25,5 +25,9 @@
 			"Host": "us-cdbr-iron-east-05.cleardb.net",
 			"Port": 3306
 		}
+	},
+	"View" : {
+		"AssetURL" : "https://apptastic-golang-web.herokuapp.com/public"
 	}
 }
+
