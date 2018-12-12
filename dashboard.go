@@ -6,17 +6,19 @@ import (
 	"apptastic/dashboard/env"
 	"apptastic/dashboard/server"
 	"apptastic/dashboard/session"
+	"apptastic/dashboard/view"
 	"log"
 	"os"
 )
 
-var (
-	environment = "dev"
-)
+var environment string
+var port string
 
 func main() {
 
+	//Load Env
 	environment = getenv("ENVIRONMENT", "dev")
+	port = getenv("PORT", "80")
 
 	//load config
 	config := config.Load(environment)
@@ -24,15 +26,16 @@ func main() {
 	//Configure session cookie store
 	session.Configure(config.Session)
 
-	//init env
+	//init env struct
 	env := &env.Env{
 		DB:     database.Connect(config.Database), //Connect to database
 		Logger: log.New(os.Stdout, "", 0),         //Create new Logger
+		View:   view.New(config.View),
 	}
 
 	//start server
 	s := server.NewServer(config.Server, env)
-	s.Run()
+	s.Run(port)
 
 }
 

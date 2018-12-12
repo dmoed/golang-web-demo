@@ -25,5 +25,8 @@
 			"Host": "127.0.0.1",
 			"Port": 3306
 		}
+	},
+	"View" : {
+		"AssetURL" : "http://localhost/public"
 	}
 }

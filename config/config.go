@@ -4,6 +4,7 @@ import (
 	"apptastic/dashboard/database"
 	"apptastic/dashboard/server"
 	"apptastic/dashboard/session"
+	"apptastic/dashboard/view"
 	"encoding/json"
 	"fmt"
 	"os"
@@ -19,6 +20,7 @@ type Configuration struct {
 	Database database.DatabaseConfig `json:"Database"`
 	Session  session.SessionConfig   `json:"Session"`
 	Server   server.ServerConfig     `json:"Server"`
+	View     view.Config             `config:"View"`
 }
 
 //LoadConfiguration from config json

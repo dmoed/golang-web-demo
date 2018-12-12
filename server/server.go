@@ -9,7 +9,6 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"os"
 	"time"
 
 	"github.com/gorilla/mux"
@@ -44,13 +43,7 @@ func NewServer(c ServerConfig, e *env.Env) *Server {
 }
 
 //Run the server
-func (s *Server) Run() {
-
-	port := os.Getenv("PORT")
-
-	if port == "" {
-		s.env.Logger.Fatal("$PORT must be set")
-	}
+func (s *Server) Run(port string) {
 
 	s.env.Logger.Println("Server is starting...")
 
@@ -75,8 +68,8 @@ func (s *Server) Run() {
 	router.PathPrefix(`/ajax/inventory`).Handler(auth.MustAuthorize(handler.InventoryHandler(s.env.DB)))
 
 	//Dashboard
-	router.PathPrefix(`/dashboard/`).Handler(auth.MustAuthorize(handler.DashboardHandler(s.env.DB)))
-	router.PathPrefix(`/dashboard/{rest:[a-zA-Z0-9=\-\/]+}`).Handler(auth.MustAuthorize(handler.DashboardHandler(s.env.DB)))
+	router.PathPrefix(`/dashboard/`).Handler(auth.MustAuthorize(handler.DashboardHandler(s.env.DB, s.env.View)))
+	router.PathPrefix(`/dashboard/{rest:[a-zA-Z0-9=\-\/]+}`).Handler(auth.MustAuthorize(handler.DashboardHandler(s.env.DB, s.env.View)))
 
 	httpServer := &http.Server{
 		Addr:         fmt.Sprintf(":%v", port),

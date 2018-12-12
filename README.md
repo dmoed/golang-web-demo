@@ -20,8 +20,10 @@ done:
 - ENV variables
 - GIT
 - Deploy to Heroku
-  
+- env asset URL
+
 todo:
+- env rename
 - OWASP testing
 - Testing code
 - scheduled jobs queue 

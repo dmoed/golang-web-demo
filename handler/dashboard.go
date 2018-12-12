@@ -2,13 +2,14 @@ package handler
 
 import (
 	"apptastic/dashboard/auth"
+	"apptastic/dashboard/view"
 	"database/sql"
 	"encoding/json"
 	"html/template"
 	"net/http"
 )
 
-func DashboardHandler(db *sql.DB) http.Handler {
+func DashboardHandler(db *sql.DB, v *view.View) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
 		//get user here
@@ -43,8 +44,7 @@ func DashboardHandler(db *sql.DB) http.Handler {
 		encoded, _ := json.Marshal(react)
 		myJSON := template.JS(encoded)
 
-		t, _ := template.ParseFiles("templates/react.html")
-		t.Execute(w, map[string]interface{}{
+		v.Render(w, "templates/react.html", map[string]interface{}{
 			"json": myJSON,
 		})
 	})
