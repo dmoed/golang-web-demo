@@ -19,10 +19,10 @@
 	},
 	"Database": {
 		"MySQL": {
-			"Username": "root",
-			"Password": "",
-			"Name": "heroku_a5ded3461cdac6c",
-			"Host": "127.0.0.1",
+			"Username": "bfcd9e758781a2",
+			"Password": "70f2f07b",
+			"Name": "heroku_6afd5a40863bda4",
+			"Host": "us-cdbr-iron-east-05.cleardb.net",
 			"Port": 3306
 		}
 	}

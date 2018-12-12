@@ -80,25 +80,31 @@ func (s *Server) Run() {
 		IdleTimeout:  15 * time.Second,
 	}
 
-	go func() {
+	s.env.Logger.Println(fmt.Sprintf("Server ready at :%s", s.Config.HTTPPort))
 
-		s.env.Logger.Println(fmt.Sprintf("HTTP server ready at :%s", s.Config.HTTPPort))
-
-		if err := http.ListenAndServe(fmt.Sprintf(":%s", s.Config.HTTPPort), http.HandlerFunc(redirectTLS)); err != nil {
-			s.env.Logger.Fatal(err)
-		}
-	}()
-
-	s.env.Logger.Println(fmt.Sprintf("HTPPS server ready at :%s", s.Config.HTTPSPort))
-
-	if err := httpServer.ListenAndServeTLS(s.Config.CertFile, s.Config.KeyFile); err != nil {
+	if err := httpServer.ListenAndServe(); err != nil {
 		s.env.Logger.Fatal(err)
 	}
+
+	// go func() {
+
+	// s.env.Logger.Println(fmt.Sprintf("HTTP server ready at :%s", s.Config.HTTPPort))
+
+	// if err := http.ListenAndServe(fmt.Sprintf(":%s", s.Config.HTTPPort), http.HandlerFunc(redirectTLS)); err != nil {
+	// 	s.env.Logger.Fatal(err)
+	// }
+	// }()
+
+	// s.env.Logger.Println(fmt.Sprintf("HTPPS server ready at :%s", s.Config.HTTPSPort))
+
+	// if err := httpServer.ListenAndServeTLS(s.Config.CertFile, s.Config.KeyFile); err != nil {
+	// 	s.env.Logger.Fatal(err)
+	// }
 }
 
-func redirectTLS(w http.ResponseWriter, r *http.Request) {
-	http.Redirect(w, r, "https://localhost:443"+r.RequestURI, http.StatusMovedPermanently)
-}
+// func redirectTLS(w http.ResponseWriter, r *http.Request) {
+// 	http.Redirect(w, r, "https://localhost:443"+r.RequestURI, http.StatusMovedPermanently)
+// }
 
 //tracing
 func tracing(nextRequestID func() string) func(http.Handler) http.Handler {
