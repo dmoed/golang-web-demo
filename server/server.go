@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/gorilla/mux"
@@ -45,6 +46,12 @@ func NewServer(c ServerConfig, e *env.Env) *Server {
 //Run the server
 func (s *Server) Run() {
 
+	port := os.Getenv("PORT")
+
+	if port == "" {
+		s.env.Logger.Fatal("$PORT must be set")
+	}
+
 	s.env.Logger.Println("Server is starting...")
 
 	nextRequestID := func() string {
@@ -72,7 +79,7 @@ func (s *Server) Run() {
 	router.PathPrefix(`/dashboard/{rest:[a-zA-Z0-9=\-\/]+}`).Handler(auth.MustAuthorize(handler.DashboardHandler(s.env.DB)))
 
 	httpServer := &http.Server{
-		Addr:         fmt.Sprintf(":%v", s.Config.HTTPPort),
+		Addr:         fmt.Sprintf(":%v", port),
 		Handler:      tracing(nextRequestID)(logging(s.env.Logger)(recoverWrapper(router))),
 		ErrorLog:     s.env.Logger,
 		ReadTimeout:  5 * time.Second,
@@ -80,7 +87,7 @@ func (s *Server) Run() {
 		IdleTimeout:  15 * time.Second,
 	}
 
-	s.env.Logger.Println(fmt.Sprintf("Server ready at :%s", s.Config.HTTPPort))
+	s.env.Logger.Println(fmt.Sprintf("Server ready at :%s", port))
 
 	if err := httpServer.ListenAndServe(); err != nil {
 		s.env.Logger.Fatal(err)
