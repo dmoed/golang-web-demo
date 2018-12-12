@@ -1,0 +1,83 @@
+@import '../../../../sass/colors';
+
+.navbar-branding{
+  text-align: center;
+  flex: 1;
+
+  a{
+    display: block;
+    color: #fff;
+    font-size: 11px;
+
+    &:hover{
+      color: $accent-color;
+    }
+  }
+
+  img{
+    width: 100px;
+  }
+}
+
+.navbar-sidebar-toggle {
+  font-size: 24px;
+  color: #fff;
+  margin-right: 12px;
+
+  > span {
+    border-radius: 50%;
+    background: none;
+    padding: 4px 8px;
+  }
+}
+
+.nav-notification-link {
+  font-size: 24px;
+  margin-right: 12px;
+
+  .notification-bell{
+    position: relative;
+    color: #fff;
+
+    .notification-counter {
+      text-align: center;
+      font-weight: bold;
+      position: absolute;
+      //top: -6px;
+      left: 12px;
+      color: white;
+      background: #0c98d7;
+      border-radius: 20px;
+      font-size: 10px;
+      line-height: 18px;
+      width: 24px;
+      height: 24px;
+      border: 2px solid black;
+    }
+  }
+}
+
+@media (min-width: 50rem) {
+
+  .navbar-branding{
+    text-align: left;
+    flex: 1;
+
+    a{
+      display: inline-block;
+      font-size: 1.25rem;
+
+      &:nth-child(2){
+        margin: 0 0 0 100px;
+      }
+    }
+  }
+
+  .navbar-sidebar-toggle{
+    display: none;
+  }
+
+  .nav-displayname{
+    display: none;
+  }
+}

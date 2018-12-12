@@ -1,0 +1,29 @@
+{
+	"Server": {
+		"Host": "localhost",
+		"HTTPPort": "80",
+		"HTTPSPort": "443",
+		"CertFile": "server/server.crt",
+		"KeyFile": "server/server.key"
+	},
+	"Session": {
+		"SecretKey": "bb049ba86fdf9e0f4399fc3a68db49c4c47fbd86",
+		"Name": "GID",
+		"Options": {
+			"Path": "/",
+			"Domain": "",
+			"MaxAge": 28800,
+			"Secure": false,
+			"HttpOnly": true
+		}
+	},
+	"Database": {
+		"MySQL": {
+			"Username": "root",
+			"Password": "",
+			"Name": "heroku_a5ded3461cdac6c",
+			"Host": "127.0.0.1",
+			"Port": 3306
+		}
+	}
+}

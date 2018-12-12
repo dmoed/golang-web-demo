@@ -1,0 +1,49 @@
+{
+	"comment": "",
+	"ignore": "test",
+	"package": [
+		{
+			"checksumSHA1": "in7NDfSohOl2q/jeijuniZPN8hY=",
+			"path": "github.com/go-sql-driver/mysql",
+			"revision": "fd197cdcfae0c686792ef5399f223f5b66a30b6b",
+			"revisionTime": "2018-10-31T14:07:16Z"
+		},
+		{
+			"checksumSHA1": "IkPM2QLv9urri7S49wzroQx9oXA=",
+			"path": "github.com/gorilla/context",
+			"revision": "08b5f424b9271eedf6f9f0ce86cb9396ed337a42",
+			"revisionTime": "2016-08-17T18:46:32Z"
+		},
+		{
+			"checksumSHA1": "kJXWK9r2PT3f0mvfFhbtCdQx8tE=",
+			"path": "github.com/gorilla/mux",
+			"revision": "3d80bc801bb034e17cae38591335b3b1110f1c47",
+			"revisionTime": "2018-10-30T15:25:28Z"
+		},
+		{
+			"checksumSHA1": "GKB96ojS6AY/uBnfLWqZBsxTBY4=",
+			"path": "github.com/gorilla/securecookie",
+			"revision": "e59506cc896acb7f7bf732d4fdf5e25f7ccd8983",
+			"revisionTime": "2017-02-24T19:38:04Z"
+		},
+		{
+			"checksumSHA1": "YGCMmY5EYGX3MU0jtmsuZNqzQd0=",
+			"path": "github.com/gorilla/sessions",
+			"revision": "41ee504a3bfe9b07b2d62ba5cc2e1314cabb4a63",
+			"revisionTime": "2018-02-06T20:22:36Z"
+		},
+		{
+			"checksumSHA1": "oCH3J96RWvO8W4xjix47PModpio=",
+			"path": "golang.org/x/crypto/bcrypt",
+			"revision": "e4dc69e5b2fd71dcaf8bd5d054eb936deb78d1fa",
+			"revisionTime": "2018-10-17T08:28:34Z"
+		},
+		{
+			"checksumSHA1": "oVPHWesOmZ02vLq2fglGvf+AMgk=",
+			"path": "golang.org/x/crypto/blowfish",
+			"revision": "e4dc69e5b2fd71dcaf8bd5d054eb936deb78d1fa",
+			"revisionTime": "2018-10-17T08:28:34Z"
+		}
+	],
+	"rootPath": "apptastic/dashboard"
+}
