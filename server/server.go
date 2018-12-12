@@ -72,7 +72,7 @@ func (s *Server) Run() {
 	router.PathPrefix(`/dashboard/{rest:[a-zA-Z0-9=\-\/]+}`).Handler(auth.MustAuthorize(handler.DashboardHandler(s.env.DB)))
 
 	httpServer := &http.Server{
-		Addr:         fmt.Sprintf(":%v", s.Config.HTTPSPort),
+		Addr:         fmt.Sprintf(":%v", s.Config.HTTPPort),
 		Handler:      tracing(nextRequestID)(logging(s.env.Logger)(recoverWrapper(router))),
 		ErrorLog:     s.env.Logger,
 		ReadTimeout:  5 * time.Second,
