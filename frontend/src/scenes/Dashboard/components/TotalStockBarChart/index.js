@@ -43,6 +43,7 @@ const StockTooltip = ({active, payload, unit}) => {
             <div className="custom-tooltip"
                  style={{backgroundColor: '#fff', border: '1px solid rgb(204, 204, 204)', padding: '12px 8px', borderRadius: '4px'}}>
                 <p><strong>{payload[0]['payload']['dates'][0]} to {payload[0]['payload']['dates'][1]}</strong></p>
+                <p><strong>{payload[0]['payload']['year_week']}</strong></p>
                 <p>{Number(payload[0]['value']).toLocaleString()} {unit}</p>
             </div>
         );
@@ -226,6 +227,8 @@ function mapStateToProps({totalStockBarChart}, ownProps) {
     let unit = "trays";
     let avgQty = 0;
     let avgVisits = 0;
+
+    data.sort((a,b) => (parseInt(a.year + "" + a.week) < parseInt(b.year + "" + b.week)) ? 1 : (parseInt(a.year + "" + a.week) > parseInt(b.year + "" + b.week) ? -1 : 0)); 
 
      if (data.length) {
 

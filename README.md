@@ -1,7 +1,11 @@
 project dashboard
 
-version 0.0.1
+0.0.1
 - start
+
+0.0.5
+- React components/scenes added
+- Inventory report added
 
 done:
 - login/logout with session cookie

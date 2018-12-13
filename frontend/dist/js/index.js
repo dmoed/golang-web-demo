@@ -98681,7 +98681,7 @@ var StockTooltip = function StockTooltip(_ref2) {
         padding: '12px 8px',
         borderRadius: '4px'
       }
-    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("strong", null, payload[0]['payload']['dates'][0], " to ", payload[0]['payload']['dates'][1])), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, Number(payload[0]['value']).toLocaleString(), " ", unit));
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("strong", null, payload[0]['payload']['dates'][0], " to ", payload[0]['payload']['dates'][1])), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("strong", null, payload[0]['payload']['year_week'])), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, Number(payload[0]['value']).toLocaleString(), " ", unit));
   }
 
   return null;
@@ -98963,6 +98963,9 @@ function mapStateToProps(_ref5, ownProps) {
   var unit = "trays";
   var avgQty = 0;
   var avgVisits = 0;
+  data.sort(function (a, b) {
+    return parseInt(a.year + "" + a.week) < parseInt(b.year + "" + b.week) ? 1 : parseInt(a.year + "" + a.week) > parseInt(b.year + "" + b.week) ? -1 : 0;
+  });
 
   if (data.length) {
     var e = 0;

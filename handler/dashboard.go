@@ -39,7 +39,7 @@ func DashboardHandler(db *sql.DB, v *view.View) http.Handler {
 						"url_ajax_total_stock_bar_chart": "/ajax/inventory/total",
 					},
 					AppName:    "GOLANG",
-					AppVersion: "0.0.1",
+					AppVersion: "0.0.5",
 					AppLogo:    "",
 					PageTitle:  "GOLANG",
 				},
