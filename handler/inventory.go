@@ -33,7 +33,7 @@ func InventoryTotalSummaryHandler(db *sql.DB, v *view.View) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
 		var err error
-		var period = 52
+		var period = 26
 		//var payload []*model.Inventory
 		var currentTime = time.Now()
 		var currentYear, currentWeek = currentTime.ISOWeek()
