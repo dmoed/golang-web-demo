@@ -7,9 +7,24 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"runtime"
 	"strconv"
 	"time"
 )
+
+func PrintMemUsage() {
+	var m runtime.MemStats
+	runtime.ReadMemStats(&m)
+	// For info on each, see: https://golang.org/pkg/runtime/#MemStats
+	fmt.Printf("Alloc = %v MiB", bToMb(m.Alloc))
+	fmt.Printf("\tTotalAlloc = %v MiB", bToMb(m.TotalAlloc))
+	fmt.Printf("\tSys = %v MiB", bToMb(m.Sys))
+	fmt.Printf("\tNumGC = %v\n", m.NumGC)
+}
+
+func bToMb(b uint64) uint64 {
+	return b / 1024 / 1024
+}
 
 func InventoryHandler(db *sql.DB, v *view.View) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -33,10 +48,12 @@ func InventoryTotalSummaryHandler(db *sql.DB, v *view.View) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
 		var err error
-		var period = 5
+		var period = 12
 		//var payload []*model.Inventory
 		var currentTime = time.Now()
 		var currentYear, currentWeek = currentTime.ISOWeek()
+		//var prevWeek int = 40
+		var prevYear int = 2018
 		weeks := make(map[string]map[string]string)
 
 		//params := r.URL.Query()
@@ -63,13 +80,15 @@ func InventoryTotalSummaryHandler(db *sql.DB, v *view.View) http.Handler {
 				"year": strconv.Itoa(previousYear),
 				"week": strconv.Itoa(previousWeek),
 			}
+
+			if i == (period - 1) {
+				//prevWeek = previousWeek
+				//prevYear = previousYear
+			}
 		}
 
-		start := time.Date(2018, 1, 1, 0, 0, 0, 0, time.UTC)
+		start := time.Date(prevYear, 8, 1, 0, 0, 0, 0, time.UTC)
 		end := currentTime
-
-		fmt.Println("start", start)
-		fmt.Println("end", end)
 
 		inventory, err := model.GetInventoryByDates(db, start, end)
 
@@ -109,6 +128,8 @@ func InventoryTotalSummaryHandler(db *sql.DB, v *view.View) http.Handler {
 			"weeks":   weeks,
 			"payload": summary2,
 		})
+
+		PrintMemUsage()
 
 		if err != nil {
 			panic(err.Error())
