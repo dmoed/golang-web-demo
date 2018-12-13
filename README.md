@@ -23,6 +23,9 @@ done:
 - env asset URL
 
 todo:
+- gracefull shutdown
+- subroutes
+- route slashes
 - env rename
 - OWASP testing
 - Testing code

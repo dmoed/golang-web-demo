@@ -20,8 +20,13 @@ func MustAuthorize(next http.Handler) http.Handler {
 		userID := sess.Values["ID"]
 
 		if userID == nil {
+
 			fmt.Println("Auth Error: 401 Unauthorized")
+
+			fmt.Println("A", r.Header.Get("Content-Type"))
+
 			http.Error(w, "401 Unauthorized", http.StatusUnauthorized)
+
 			return
 
 			//todo redirect

@@ -18,7 +18,7 @@ func main() {
 
 	//Load Env
 	environment = getenv("ENVIRONMENT", "dev")
-	port = getenv("PORT", "80")
+	port = getenv("PORT", "5000")
 
 	//load config
 	config := config.Load(environment)
@@ -36,7 +36,6 @@ func main() {
 	//start server
 	s := server.NewServer(config.Server, env)
 	s.Run(port)
-
 }
 
 func getenv(key, fallback string) string {

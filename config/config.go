@@ -19,7 +19,7 @@ var (
 type Configuration struct {
 	Database database.DatabaseConfig `json:"Database"`
 	Session  session.SessionConfig   `json:"Session"`
-	Server   server.ServerConfig     `json:"Server"`
+	Server   server.Config           `json:"Server"`
 	View     view.Config             `config:"View"`
 }
 

@@ -1,4 +1,28 @@
+@import "./../../sass/colors";
 
 .bg-default {
     background: black;
+}
+
+.page-wrapper {
+    background: $body-color;
+}
+  
+.page-content-wrapper {
+    margin-top: 65px;
+    flex: 1;
+    min-width: 0;
+}
+
+.page-content {
+    background: #fff;
+    padding: 20px 20px 100px 20px;
+    margin: 12px;
+    min-height: 100vh;
+}
+
+.page-content-empty {
+    padding: 1px 10px 100px 10px;
+    width: 100%;
+    min-height: 100vh;
 }

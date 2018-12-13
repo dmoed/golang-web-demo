@@ -2,22 +2,23 @@ package handler
 
 import (
 	"apptastic/dashboard/model"
+	"apptastic/dashboard/view"
 	"database/sql"
 	"encoding/json"
 	"net/http"
 	"strconv"
 )
 
-func ProductHandler(db *sql.DB) http.Handler {
+func ProductHandler(db *sql.DB, v *view.View) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
 		var p = 1
 		var l = 5
 		var err error
-		v := r.URL.Query()
+		q := r.URL.Query()
 
-		limit := v.Get("limit")
-		page := v.Get("page")
+		limit := q.Get("limit")
+		page := q.Get("page")
 
 		if page != "" {
 
@@ -52,7 +53,6 @@ func ProductHandler(db *sql.DB) http.Handler {
 			panic(err.Error())
 		}
 
-		w.Header().Set("Content-Type", "application/json")
-		w.Write(data)
+		v.RenderJSON(w, data)
 	})
 }

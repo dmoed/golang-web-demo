@@ -27,6 +27,6 @@
 		}
 	},
 	"View" : {
-		"AssetURL" : "http://localhost/public"
+		"AssetURL" : "http://localhost:5000/public"
 	}
 }

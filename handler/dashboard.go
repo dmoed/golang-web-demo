@@ -33,10 +33,15 @@ func DashboardHandler(db *sql.DB, v *view.View) http.Handler {
 			},
 			Props: reactProps{
 				Config: reactPropsConfig{
-					BaseUrl:    "localhost",
+					BaseUrl: "localhost",
+					Routes: map[string]string{
+						"logout":                         "/logout",
+						"url_ajax_total_stock_bar_chart": "/ajax/inventory/total",
+					},
 					AppName:    "GOLANG",
 					AppVersion: "0.0.1",
 					AppLogo:    "",
+					PageTitle:  "GOLANG",
 				},
 			},
 		}
@@ -64,13 +69,14 @@ type reactProps struct {
 }
 
 type reactPropsConfig struct {
-	BaseUrl    string `json:"base_url"`
-	Host       string `json:"host"`
-	Scheme     string `json:"scheme"`
-	Routes     string `json:"routes"`
-	AppName    string `json:"app_name"`
-	AppLogo    string `json:"app_logo"`
-	AppVersion string `json:"app_version"`
+	BaseUrl    string            `json:"base_url"`
+	Host       string            `json:"host"`
+	Scheme     string            `json:"scheme"`
+	Routes     map[string]string `json:"routes"`
+	AppName    string            `json:"app_name"`
+	AppLogo    string            `json:"app_logo"`
+	AppVersion string            `json:"app_version"`
+	PageTitle  string            `json:"page_title"`
 }
 
 type UserProps struct {

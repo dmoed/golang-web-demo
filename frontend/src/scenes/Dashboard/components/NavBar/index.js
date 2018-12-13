@@ -3,6 +3,7 @@ import React from 'react';
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
 import {toggleSidebar, toggleProfilePopup, toggleNotificationPopup} from '../../actions'
+import Avatar from './components/Avatar'
 import './style.scss'
 
 import {
@@ -17,7 +18,7 @@ import {
 
 class MyNavbar extends React.Component {
     render() {
-        const {config: {app_name = "", app_logo = "", app_version = ""}, nCounter, displayname, openSidebar, openNotificationPopup} = this.props;
+        const {config: {app_name = "", app_logo = "", app_version = ""}, nCounter, displayname, openSidebar, openProfilePopup, openNotificationPopup} = this.props;
 
         return (
             <Navbar color="default" dark fixed="top" expand="md">
@@ -45,6 +46,8 @@ class MyNavbar extends React.Component {
                         </a>
                     </NavItem>
                 </ul>
+
+                <Avatar displayname={displayname} onClick={openProfilePopup}/>
             </Navbar>
         );
     }
@@ -52,7 +55,7 @@ class MyNavbar extends React.Component {
 
 function mapStateToProps(store) {
     return {
-        nCounter: 1,
+        nCounter: 0,
         displayname: store.user.displayname,
     }
 }

@@ -33,8 +33,6 @@ func LoginHandler(db *sql.DB) http.Handler {
 
 				formErrors = append(formErrors, "Credentials invalid")
 
-				panic("invalid creds")
-
 			} else {
 
 				fmt.Println("user found", user)

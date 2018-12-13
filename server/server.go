@@ -20,8 +20,8 @@ const (
 	requestIDKey key = 0
 )
 
-//ServerConfig is the server config struct
-type ServerConfig struct {
+//Config is the server config struct
+type Config struct {
 	Host      string
 	HTTPPort  string
 	HTTPSPort string
@@ -29,13 +29,14 @@ type ServerConfig struct {
 	KeyFile   string
 }
 
+//Server represents a server struct
 type Server struct {
-	Config ServerConfig
+	Config Config
 	env    *env.Env
 }
 
 //NewServer creates a new Server struct
-func NewServer(c ServerConfig, e *env.Env) *Server {
+func NewServer(c Config, e *env.Env) *Server {
 	return &Server{
 		Config: c,
 		env:    e,
@@ -57,19 +58,22 @@ func (s *Server) Run(port string) {
 	router.PathPrefix("/public/").Handler(http.StripPrefix("/public/", http.FileServer(http.Dir("./frontend/dist/"))))
 
 	//Auth
-	router.PathPrefix("/login").Handler(handler.LoginHandler(s.env.DB))
-	router.PathPrefix("/logout").Handler(handler.LogoutHandler())
+	router.PathPrefix("/login").Handler(handler.LoginHandler(s.env.DB)) //split GET & POST
+	router.PathPrefix("/logout").Handler(handler.LogoutHandler()).Methods("GET")
 	//todo: request password reset
 
 	//Ajax
 	router.PathPrefix(`/ajax/profile`).Handler(auth.MustAuthorize(handler.ProfileHandler(s.env.DB)))
-	router.PathPrefix(`/ajax/products`).Handler(auth.MustAuthorize(handler.ProductHandler(s.env.DB)))
-	router.PathPrefix(`/ajax/inventory/total`).Handler(auth.MustAuthorize(handler.InventoryTotalSummaryHandler(s.env.DB)))
-	router.PathPrefix(`/ajax/inventory`).Handler(auth.MustAuthorize(handler.InventoryHandler(s.env.DB)))
+	router.PathPrefix(`/ajax/products`).Handler(auth.MustAuthorize(handler.ProductHandler(s.env.DB, s.env.View)))
+	router.PathPrefix(`/ajax/inventory/total`).Handler(auth.MustAuthorize(handler.InventoryTotalSummaryHandler(s.env.DB, s.env.View)))
+	router.PathPrefix(`/ajax/inventory`).Handler(auth.MustAuthorize(handler.InventoryHandler(s.env.DB, s.env.View)))
 
 	//Dashboard
 	router.PathPrefix(`/dashboard/`).Handler(auth.MustAuthorize(handler.DashboardHandler(s.env.DB, s.env.View)))
 	router.PathPrefix(`/dashboard/{rest:[a-zA-Z0-9=\-\/]+}`).Handler(auth.MustAuthorize(handler.DashboardHandler(s.env.DB, s.env.View)))
+
+	//Default
+	//router.PathPrefix("/").Handler(http.RedirectHandler("/login", 302))
 
 	httpServer := &http.Server{
 		Addr:         fmt.Sprintf(":%v", port),

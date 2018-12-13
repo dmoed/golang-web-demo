@@ -38,3 +38,10 @@ func (v View) Render(w http.ResponseWriter, templateName string, vars interface{
 
 	t.Execute(w, vars)
 }
+
+//RenderJSON renders json response
+func (v View) RenderJSON(w http.ResponseWriter, data []byte) {
+
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(data)
+}
