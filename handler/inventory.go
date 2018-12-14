@@ -50,16 +50,21 @@ func InventoryTotalSummaryHandler(db *sql.DB, v *view.View, logger *log.Logger) 
 
 		layout := "Mon 2 Jan"
 		yr, wk := time.Now().ISOWeek()
+
 		year := getQueryParamInt(r, "year", yr)
 		week := getQueryParamInt(r, "week", wk)
+		max := getQueryParamInt(r, "max", 26)
 
-		period := 26
+		if max < 1 {
+			max = 1
+		}
+		if max > 52 {
+			max = 52
+		}
+
 		end := model.WeekStart(year, week).AddDate(0, 0, 6)
-		start := end.AddDate(0, 0, -(period*7)+1)
-		weeks := model.GetWeeks(year, week, period)
-
-		fmt.Println("start", start)
-		fmt.Println("end", end)
+		start := end.AddDate(0, 0, -(max*7)+1)
+		weeks := model.GetWeeks(year, week, max)
 
 		inventory, err := model.GetInventoryByDates(db, start, end)
 
@@ -99,7 +104,6 @@ func InventoryTotalSummaryHandler(db *sql.DB, v *view.View, logger *log.Logger) 
 		}
 
 		data, err := json.Marshal(map[string]interface{}{
-			"weeks":   weeks,
 			"start":   start,
 			"end":     end,
 			"payload": summary,

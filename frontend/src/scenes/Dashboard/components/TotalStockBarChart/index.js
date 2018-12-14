@@ -85,16 +85,16 @@ class TotalStockBarChart extends React.Component {
     }
 
     componentDidMount() {
-        let {week, year, fetchData} = this.props;
+        let {week, year, fetchData, period} = this.props;
 
-        setTimeout(() => fetchData(week, year), 100);
+        setTimeout(() => fetchData(week, year, period), 100);
     }
 
     componentDidUpdate(prevProps) {
 
-        let {unit, week, year, fetchData} = this.props;
+        let {period, week, year, fetchData} = this.props;
 
-        //console.log(TAG, 'updated');
+        console.log(TAG, 'updated');
         let dirty = false;
 
         if (prevProps.week !== week) {
@@ -103,15 +103,18 @@ class TotalStockBarChart extends React.Component {
         if (prevProps.year !== year) {
             dirty = true;
         }
+        if (prevProps.period !== period) {
+            dirty = true;
+        }
 
         if (dirty) {
-            setTimeout(() => fetchData(week, year), 100);
+            setTimeout(() => fetchData(week, year, period), 100);
         }
     }
 
     render() {
 
-        const {isLoading, data, unit, avgQty, avgVisits} = this.props;
+        const {isLoading, data, period, unit, avgQty, avgVisits} = this.props;
         let {exportIsLoading} = this.state;
 
         return (
@@ -137,7 +140,7 @@ class TotalStockBarChart extends React.Component {
                             <Loader />
                             :
                             <div className="text-center">
-                                {this.renderStockChart(data, avgQty, unit)}
+                                {this.renderStockChart(data, avgQty, unit, period)}
                                 <span>
                                     Gemiddeld voorraad <em
                                     style={{color: 'red'}}>{avgQty.toLocaleString()} {unit}</em> per week.
@@ -149,7 +152,7 @@ class TotalStockBarChart extends React.Component {
         );
     }
 
-    renderStockChart(data, avgQty, unit = 'trays') {
+    renderStockChart(data, avgQty, unit = 'trays', period) {
 
         if (data.length < 1) {
             return null;
@@ -158,15 +161,13 @@ class TotalStockBarChart extends React.Component {
         let dataKey = 'total_' + unit;
 
         return (
-            <ResponsiveContainer width='100%' minHeight={180} style={{margin: '0 auto'}}>
-                <BarChart height={100} data={data} margin={{top: 15, right: 0, left: 0, bottom: 5}}
+                <BarChart height={240} width={period * 100} data={data} margin={{top: 15, right: 0, left: 0, bottom: 5}}
                           ref={(chart) => this.stockBarChart = chart}>
                     <XAxis dataKey="label" axisLine={false} tickSize={0} tick={renderCustomizedXTick}/>
                     <Tooltip content={<StockTooltip unit={unit}/>}/>
                     <ReferenceLine y={avgQty} label="" stroke="red" strokeDasharray="3 3"/>
                     <Bar dataKey={dataKey} fill='#f26522' label={<CustomizedLabel />} isAnimationActive={false}/>
                 </BarChart>
-            </ResponsiveContainer>
         );
     }
 
@@ -221,10 +222,10 @@ class TotalStockBarChart extends React.Component {
     }
 }
 
-function mapStateToProps({totalStockBarChart}, ownProps) {
+function mapStateToProps({totalStockBarChart, filterWidget}, ownProps) {
 
     let data = Object.values(totalStockBarChart.data);
-    let unit = "trays";
+    let unit = filterWidget.unit;
     let avgQty = 0;
     let avgVisits = 0;
 
@@ -251,9 +252,10 @@ function mapStateToProps({totalStockBarChart}, ownProps) {
     return {
         isLoading:false,
         data: data,
-        unit: "trays",
-        week: 52,
-        year: 2018,
+        unit: unit,
+        period: filterWidget.period,
+        week: filterWidget.week,
+        year: filterWidget.year,
         avgQty: avgQty,
         avgVisits: avgVisits
     }
@@ -261,10 +263,11 @@ function mapStateToProps({totalStockBarChart}, ownProps) {
 
 function mapDispatchToProps(dispatch, ownProps) {
     return {
-        fetchData: (week, year) => {
+        fetchData: (week, year, period) => {
             let url = new Url(ownProps.url);
             url.query.week = week;
             url.query.year = year;
+            url.query.max = period;
             dispatch(fetchData(url.toString()))
         }
     }

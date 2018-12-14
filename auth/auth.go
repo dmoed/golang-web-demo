@@ -14,7 +14,7 @@ func MustAuthorize(next http.Handler) http.Handler {
 
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
-		fmt.Println("Auth check")
+		//fmt.Println("Auth check")
 
 		sess := session.Instance(r)
 		userID := sess.Values["ID"]
@@ -34,7 +34,7 @@ func MustAuthorize(next http.Handler) http.Handler {
 
 		next.ServeHTTP(w, r)
 
-		fmt.Println("Auth Check Finished")
+		//fmt.Println("Auth Check Finished")
 	})
 }
 

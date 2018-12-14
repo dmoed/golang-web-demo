@@ -2,6 +2,7 @@ import React from 'react'
 import moment from 'moment'
 
 import withPage from './../../components/Page/index'
+import FilterWidget from './../../components/Filter/index';
 import TotalStockBarChart from './../../components/TotalStockBarChart'
 const currentWeek = moment().format('w');
 
@@ -15,6 +16,7 @@ class Home extends React.Component {
             <div className="page-content-empty">
                 <h1>Report</h1>
 
+                <FilterWidget />
                 <div>
                     <TotalStockBarChart url={url_ajax_total_stock_bar_chart} currentWeek={currentWeek}/>
                 </div>
