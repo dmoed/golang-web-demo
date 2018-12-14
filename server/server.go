@@ -65,8 +65,8 @@ func (s *Server) Run(port string) {
 	//Ajax
 	router.PathPrefix(`/ajax/profile`).Handler(auth.MustAuthorize(handler.ProfileHandler(s.env.DB)))
 	router.PathPrefix(`/ajax/products`).Handler(auth.MustAuthorize(handler.ProductHandler(s.env.DB, s.env.View)))
-	router.PathPrefix(`/ajax/inventory/total`).Handler(auth.MustAuthorize(handler.InventoryTotalSummaryHandler(s.env.DB, s.env.View)))
-	router.PathPrefix(`/ajax/inventory`).Handler(auth.MustAuthorize(handler.InventoryHandler(s.env.DB, s.env.View)))
+	router.PathPrefix(`/ajax/inventory/total`).Handler(auth.MustAuthorize(handler.InventoryTotalSummaryHandler(s.env.DB, s.env.View, s.env.Logger)))
+	router.PathPrefix(`/ajax/inventory`).Handler(auth.MustAuthorize(handler.InventoryHandler(s.env.DB, s.env.View, s.env.Logger)))
 
 	//Dashboard
 	router.PathPrefix(`/dashboard/`).Handler(auth.MustAuthorize(handler.DashboardHandler(s.env.DB, s.env.View)))

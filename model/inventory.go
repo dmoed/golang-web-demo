@@ -3,8 +3,62 @@ package model
 import (
 	"database/sql"
 	"fmt"
+	"strconv"
 	"time"
 )
+
+type Week struct {
+	Year      int
+	Week      int
+	StartDate time.Time
+	EndDate   time.Time
+}
+
+//GetWeeks returns slice of Week struct
+func GetWeeks(year, week, period int) []*Week {
+
+	if period == 0 {
+		period = 1
+	}
+
+	weeks := []*Week{}
+
+	date := WeekStart(year, week)
+
+	for i := 0; i < period; i++ {
+
+		ndate := date.AddDate(0, 0, -i*7)
+		yr, wk := ndate.ISOWeek()
+
+		weeks = append(weeks, &Week{
+			Year:      yr,
+			Week:      wk,
+			StartDate: ndate,
+			EndDate:   ndate.AddDate(0, 0, 6),
+		})
+	}
+
+	return weeks
+}
+
+//WeekStart returns time.Time, first day of week
+func WeekStart(year, week int) time.Time {
+	// Start from the middle of the year:
+	t := time.Date(year, 7, 1, 0, 0, 0, 0, time.UTC)
+
+	// Roll back to Monday:
+	if wd := t.Weekday(); wd == time.Sunday {
+		t = t.AddDate(0, 0, -6)
+	} else {
+		t = t.AddDate(0, 0, -int(wd)+1)
+	}
+
+	// Difference in weeks:
+	_, w := t.ISOWeek()
+	t = t.AddDate(0, 0, (week-w)*7)
+
+	return t
+}
 
 type Inventory struct {
 	ID         string `json:"id"`
@@ -119,7 +173,7 @@ func FilterByLatestPerWeek(list []*Inventory) []*Inventory {
 		Date  int64 `json:"date"`
 	}
 
-	GroupMap := make(map[string]*Group, 0)
+	GroupMap := make(map[string]Group, 0)
 
 mainLoop:
 	for k, v := range list {
@@ -132,7 +186,7 @@ mainLoop:
 
 		if element, ok := GroupMap[key]; ok == false {
 
-			GroupMap[key] = &Group{
+			GroupMap[key] = Group{
 				Index: []int{k},
 				Date:  t.Unix(),
 			}
@@ -164,7 +218,7 @@ mainLoop:
 		}
 	}
 
-	var payload []*Inventory
+	payload := make([]*Inventory, 0)
 
 	for _, gm := range GroupMap {
 
@@ -199,6 +253,12 @@ func GetSummaryWeekProductCustomer(inventory []*Inventory) []*SummaryWeekProduct
 
 		if val, ok := list[key]; ok == false {
 
+			date, err := time.Parse(layout, v.Date)
+
+			if err != nil {
+				panic(err.Error())
+			}
+
 			list[key] = &SummaryWeekProductCustomer{
 				ID:           v.ProductID,
 				CustomerID:   v.CustomerID,
@@ -206,7 +266,7 @@ func GetSummaryWeekProductCustomer(inventory []*Inventory) []*SummaryWeekProduct
 				YearWeek:     key,
 				Year:         v.Year,
 				Week:         v.Week,
-				Date:         time.Now(),
+				Date:         date,
 				TotalTrays:   qtyTrays,
 				TotalBottles: qtyBottles,
 			}
@@ -218,7 +278,7 @@ func GetSummaryWeekProductCustomer(inventory []*Inventory) []*SummaryWeekProduct
 		}
 	}
 
-	var payload []*SummaryWeekProductCustomer
+	payload := make([]*SummaryWeekProductCustomer, 0)
 
 	for _, s := range list {
 
@@ -231,6 +291,7 @@ func GetSummaryWeekProductCustomer(inventory []*Inventory) []*SummaryWeekProduct
 //
 func GetSummaryWeek(s []*SummaryWeekProductCustomer) []*SummaryWeek {
 
+	layout := "Mon 2 Jan"
 	SummaryWeekMap := make(map[string]*SummaryWeek, 0)
 
 	for _, v := range s {
@@ -241,11 +302,21 @@ func GetSummaryWeek(s []*SummaryWeekProductCustomer) []*SummaryWeek {
 
 		if val, ok := SummaryWeekMap[key]; ok == false {
 
+			yr, err := strconv.Atoi(v.Year)
+			wk, err := strconv.Atoi(v.Week)
+
+			if err != nil {
+				panic(err.Error())
+			}
+
+			date1 := WeekStart(yr, wk).Format(layout)
+			date2 := WeekStart(yr, wk).AddDate(0, 0, 6).Format(layout)
+
 			SummaryWeekMap[key] = &SummaryWeek{
 				YearWeek:     key,
 				Year:         v.Year,
 				Week:         v.Week,
-				Dates:        []string{"Y-m-d", "Y-m-d"},
+				Dates:        []string{date1, date2},
 				TotalTrays:   totalTrays,
 				TotalBottles: totalBottles,
 				Label:        fmt.Sprintf("WK%v", v.Week),
@@ -258,7 +329,7 @@ func GetSummaryWeek(s []*SummaryWeekProductCustomer) []*SummaryWeek {
 		}
 	}
 
-	var payload []*SummaryWeek
+	payload := make([]*SummaryWeek, 0)
 
 	for _, s := range SummaryWeekMap {
 
