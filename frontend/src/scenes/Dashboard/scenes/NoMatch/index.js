@@ -1,7 +1,7 @@
 import React from 'react';
 
 import withPage from './../../components/Page/index'
-// import img from './../../notfound.png'
+import img from './../../notfound.png'
 import './style.scss'
 
 class NoMatch extends React.Component {
@@ -11,7 +11,7 @@ class NoMatch extends React.Component {
                 <div className="page-content not-found">
                     <h1>404</h1>
                     <h3>The page you're looking for was not found</h3>
-                    <div className="preview" style={{backgroundImage: `url()`}}>
+                    <div className="preview" style={{backgroundImage: `url(${img})`}}>
                     </div>
                 </div>
             </div>

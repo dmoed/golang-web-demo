@@ -5,6 +5,7 @@ import (
 	"runtime"
 )
 
+//PrintMemUsage logs the mem usage
 func PrintMemUsage() {
 
 	var m runtime.MemStats
